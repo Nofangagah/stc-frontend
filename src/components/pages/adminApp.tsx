@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Footer } from '../Footer'; 
 import { Toaster } from '../../components/ui/sonner'; 
 import { AdminDashboard } from './adminDashboard'; 
-import { AdminHeader } from './AdminHeader'; 
+import { AdminHeader } from './adminHeader'; 
 import { Link } from 'react-router-dom'; 
 import { AdminLogin } from './adminLogin';
 

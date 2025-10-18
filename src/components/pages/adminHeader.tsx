@@ -2,7 +2,7 @@ import React from 'react';
 import { Lock, LogOut } from 'lucide-react';
 // import logo from 'figma:asset/ca0337a70b0d772e0505b965cd0ed7882de60418.png'; // Ganti dengan path logo aktual Anda
 
-// 1. Tambahkan interface untuk props
+
 interface AdminHeaderProps {
     onLogout: () => void;
 }
