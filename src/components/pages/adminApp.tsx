@@ -7,15 +7,14 @@ import { Link } from 'react-router-dom';
 import { AdminLogin } from './adminLogin';
 
 export default function AdminApp() {
-    // PERBAIKAN: Inisialisasi state dengan memeriksa token di localStorage.
-    // Jika token ada, isLoggedIn = true.
+   
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token')); 
 
-    // OPTIONAL: Periksa status token saat mount (untuk kasus token baru saja expired)
+  
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            // Dalam aplikasi nyata, tambahkan API call untuk memvalidasi token
+            
             setIsLoggedIn(true);
         } else {
             setIsLoggedIn(false);
@@ -28,15 +27,15 @@ export default function AdminApp() {
 
     const handleLogout = () => {
         setIsLoggedIn(false);
-        // Wajib: Hapus token dari localStorage saat logout
+      
         localStorage.removeItem('token'); 
     };
 
     if (!isLoggedIn) {
         return (
-            // Tampilkan halaman login jika belum login
+          
             <div className="min-h-screen">
-                {/* Pastikan AdminLogin juga diperbarui dengan token check logic */}
+               
                 <AdminLogin onLoginSuccess={handleLoginSuccess} />
                 <Toaster position="top-center" richColors />
             </div>

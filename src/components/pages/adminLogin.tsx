@@ -20,6 +20,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
 
     try {
       const response = await loginAdminApi(username, password);
+      console.log(response);
       if (response.status === 200 || response.status === true) {
         const token = response.data?.token;
         if (token) localStorage.setItem('token', token);
