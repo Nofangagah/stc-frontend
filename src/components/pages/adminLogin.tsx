@@ -14,13 +14,13 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // START PERBAIKAN: Mengosongkan state saat komponen dimuat
+
   useEffect(() => {
-    // Kosongkan state form untuk memastikan input bersih
+  
     setUsername('');
     setPassword('');
     setError('');
-  }, []); // [] memastikan ini hanya berjalan saat komponen pertama kali di-mount
+  }, []); 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +30,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
       const response = await loginAdminApi(username, password);
       console.log(response);
 
-      // Logika di sini hanya berjalan jika status HTTP 2xx
+   
       if (response.status === true && response.data?.token) {
         const token = response.data.token;
         if (token) localStorage.setItem('token', token);
@@ -43,7 +43,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
       }
     } catch (err: any) {
       console.error("Error from API catch:", err); 
-      // Mengambil pesan error dari backend jika dilempar
+     
       const errorMessage = err?.message || err?.error?.message || 'Terjadi kesalahan koneksi atau server. Silakan coba lagi.';
       setError(errorMessage);
     }
@@ -51,10 +51,10 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-3">
-      {/* Container */}
+      
       <div className="w-[90%] max-w-[340px] bg-white rounded-2xl shadow-xl border border-gray-100 p-6">
         
-        {/* Header */}
+       
         <div className="text-center mb-6">
           <div className="flex justify-center mb-3">
             <Lock size={38} className="text-[#F9B800]" />
@@ -65,7 +65,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
           </p>
         </div>
 
-        {/* Form */}
+      
         <form onSubmit={handleSubmit} className="space-y-3">
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded-md flex items-center gap-2 text-xs">
@@ -84,7 +84,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
               onChange={(e) => setUsername(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#F9B800] focus:border-[#F9B800] outline-none transition text-sm"
               placeholder="admin"
-              // Mencegah browser menyimpan atau mengisi secara otomatis
+            
               autoComplete="off" 
               required
             />
@@ -100,7 +100,6 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#F9B800] focus:border-[#F9B800] outline-none transition text-sm"
               placeholder="********"
-              // Mencegah browser menyimpan atau mengisi secara otomatis
               autoComplete="new-password" 
               required
             />
@@ -114,7 +113,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
           </button>
         </form>
 
-        {/* Footer */}
+       
         <div className="text-center mt-5">
           <a href="/" className="text-gray-500 hover:text-[#F9B800] text-xs">
             ← Kembali ke Halaman Utama
