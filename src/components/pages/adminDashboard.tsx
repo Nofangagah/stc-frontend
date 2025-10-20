@@ -133,7 +133,7 @@ export const AdminDashboard = () => {
                     const articlesRes = await getAllArticles();
                     setArticles(normalizeArticles(articlesRes.data));
                 } catch (err) {
-                    console.error('Gagal mengambil data Articles:', err);
+                   
                     setArticles([]);
                 }
 

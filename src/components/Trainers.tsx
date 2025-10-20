@@ -15,9 +15,9 @@ interface Trainer {
 
 const fetchTrainers = async (): Promise<Trainer[]> => {
   const { data } = await getAllTrainers();
-  console.log('Fetched trainers:', data);
+ 
 
-  // Pastikan bentuknya array
+ 
   const trainersArray = data.trainers || data || [];
 
   return trainersArray.map((trainer: any) => ({

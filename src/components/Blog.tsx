@@ -27,7 +27,7 @@ const formatDate = (dateString: string) => {
 
 const fetchBlogPosts = async (): Promise<BlogPost[]> => {
   const { data } = await getAllArticles();
-  console.log('Fetched articles:', data);
+ 
   return data.map((post: any) => ({
     id: post.id,
     title: post.title,
