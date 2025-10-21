@@ -24,7 +24,7 @@ export const Hero = () => {
         <div className="absolute inset-0 bg-black/50" style={{ boxShadow: 'inset 0 0 100px rgba(0, 0, 0, 0.3)' }}></div>
       </div>
 
-      <div className="container mx-auto px-4 py-12 md:py-20 relative z-10">
+      <div className="container mx-auto px-4 pt-4 md:pt-8 pb-12 md:pb-20 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Kolom Kiri - Konten */}
           <div className="text-left text-white md:pl-24">
