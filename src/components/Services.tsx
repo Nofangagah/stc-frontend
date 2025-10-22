@@ -2,6 +2,15 @@ import React, { useState } from 'react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 
+// tambahkan import gambar lokal (sesuaikan nama file yang Anda taruh di folder assets)
+import imgPublicSpeaking from '../assets/public-speaking.jpg';
+import imgMC from '../assets/mc.jpg';
+import imgRadio from '../assets/radio.jpg';
+import imgKids from '../assets/kids.jpg';
+import imgTeens from '../assets/teens.jpg';
+import imgPrivate from '../assets/private.jpg';
+import imgCorporate from '../assets/corporate.jpg';
+
 /**
  * Data layanan/services - Siap untuk sistem CRUD melalui dashboard admin
  * Struktur data yang konsisten memudahkan integrasi dengan backend/database
@@ -25,7 +34,7 @@ const servicesData = [
     title: 'Public Speaking Intensive',
     price: 'Rp. 1.000.000,-',
     description: 'Belajar bagaimana tampil maksimal dan percaya diri ketika berbicara di depan umum.',
-    image: 'https://images.unsplash.com/photo-1759922378092-14917cba3f59?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwdWJsaWMlMjBzcGVha2luZyUyMHByZXNlbnRhdGlvbnxlbnwxfHx8fDE3NjAyMDM3ODZ8MA&ixlib=rb-4.1.0&q=80&w=1080',
+    image: imgPublicSpeaking,
     details: [
       'Total 6x pertemuan',
       'Durasi setiap pertemuan 1,5 jam',
@@ -41,7 +50,7 @@ const servicesData = [
     title: 'Master of Ceremony Intensive',
     price: 'Rp. 1.000.000,-',
     description: 'Belajar menjadi MC profesional dengan beragam kategori acara formal/semi formal/nonformal.',
-    image: 'https://images.unsplash.com/photo-1740630267005-db9af10c0164?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYXN0ZXIlMjBjZXJlbW9ueSUyMGV2ZW50fGVufDF8fHx8MTc2MDIyMDkyMHww&ixlib=rb-4.1.0&q=80&w=1080',
+    image: imgMC,
     details: [
       'Total 6x pertemuan',
       'Durasi setiap pertemuan 1,5 jam',
@@ -57,7 +66,7 @@ const servicesData = [
     title: 'Radio Announcer Intensive',
     price: 'Rp. 1.100.000,-',
     description: 'Belajar bagaimana menjadi penyiar radio, olah vokal dan teknis siaran.',
-    image: 'https://images.unsplash.com/photo-1581092800573-6afa755dcdc7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyYWRpbyUyMGFubm91bmNlciUyMGJyb2FkY2FzdGluZ3xlbnwxfHx8fDE3NjAyMjA5MjB8MA&ixlib=rb-4.1.0&q=80&w=1080',
+    image: imgRadio,
     details: [
       'Total 6x pertemuan',
       'Durasi setiap pertemuan 1,5 jam',
@@ -73,7 +82,7 @@ const servicesData = [
     title: 'Kids Intensive Program (Public Speaking)',
     price: 'Rp. 655.000,-',
     description: 'Belajar lebih percaya diri dan berani ketika berbicara di depan umum.',
-    image: 'https://images.unsplash.com/photo-1618079525667-2162b29ac0d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxraWRzJTIwcHVibGljJTIwc3BlYWtpbmd8ZW58MXx8fHwxNzYwMjIwOTY1fDA&ixlib=rb-4.1.0&q=80&w=1080',
+    image: imgKids,
     details: [
       'Total 5x pertemuan',
       'Durasi setiap pertemuan 1 jam',
@@ -89,7 +98,7 @@ const servicesData = [
     title: 'Teens Intensive Program (Public Speaking)',
     price: 'Rp. 755.000,-',
     description: 'Belajar lebih percaya diri dan berani ketika berbicara di depan umum.',
-    image: 'https://images.unsplash.com/photo-1660794486044-ff1072c442f9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWVuYWdlciUyMHByZXNlbnRhdGlvbiUyMHNwZWFraW5nfGVufDF8fHx8MTc2MDIyMDk2Nnww&ixlib=rb-4.1.0&q=80&w=1080',
+    image: imgTeens,
     details: [
       'Total 5x pertemuan',
       'Durasi setiap pertemuan 1 jam',
@@ -105,7 +114,7 @@ const servicesData = [
     title: 'Private Class',
     price: 'Mulai dari Rp. 1.500.000,-',
     description: 'Materi disesuaikan dengan kebutuhan peserta dengan pilihan public speaking, MC, radio announcer, personal branding, Voice Over, content creator, storytelling, grooming, leadership, service excellent, business presentation, debat, etc.',
-    image: 'https://images.unsplash.com/photo-1664802273197-7cdd6a6cbc6e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcml2YXRlJTIwY2xhc3MlMjB0cmFpbmluZ3xlbnwxfHx8fDE3NjAyMjA5NjZ8MA&ixlib=rb-4.1.0&q=80&w=1080',
+    image: imgPrivate,
     details: [
       'Total 4x pertemuan',
       'Durasi setiap pertemuan 1 jam',
@@ -120,7 +129,7 @@ const servicesData = [
     title: 'Corporate Training',
     price: 'Hubungi Kami',
     description: 'Materi disesuaikan dengan kebutuhan instansi/perusahaan.',
-    image: 'https://images.unsplash.com/photo-1758691736067-b309ee3ef7b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb3Jwb3JhdGUlMjB0cmFpbmluZyUyMGJ1c2luZXNzfGVufDF8fHx8MTc2MDIyMDkyMnww&ixlib=rb-4.1.0&q=80&w=1080',
+    image: imgCorporate,
     details: [
       'Two Days Training > 12 hours',
       'Full Day Training > 6 hours',
