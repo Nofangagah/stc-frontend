@@ -8,6 +8,8 @@ import trainer5 from '../assets/trainer-5.jpg';
 import trainer6 from '../assets/trainer-6.jpg';
 import trainer7 from '../assets/trainer-7.jpg';
 import trainer9 from '../assets/trainer-9.jpg';
+import trainer10 from '../assets/trainer-10.jpg';
+
 // Trainer 8 & 10 menggunakan placeholder "Coming Soon"
 import comingSoonPlaceholder from '../assets/coming-soon-trainer.svg';
 
@@ -78,6 +80,6 @@ export const trainersLocal: Trainer[] = [
         id: 10,
         name: "Arifah Putri",
         expertise: ["Professional Public Speaker"],
-        avatarUrl: comingSoonPlaceholder
+        avatarUrl: trainer10
     }
 ];
