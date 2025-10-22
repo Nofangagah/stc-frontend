@@ -90,8 +90,7 @@ export const Contact = () => {
           </h2>
           <div className="w-20 md:w-24 lg:w-32 h-1 bg-[#F9B800] mx-auto mb-3 md:mb-4 lg:mb-6"></div>
           <p className="text-gray-600 max-w-2xl lg:max-w-3xl mx-auto text-sm md:text-base lg:text-lg px-4 leading-relaxed">
-            Punya pertanyaan atau ingin berkonsultasi? Jangan
-            ragu untuk menghubungi kami
+            Punya pertanyaan atau ingin berkonsultasi? Hubungi kami untuk mendiskusikan kebutuhan pelatihan Anda!
           </p>
         </div>
 
