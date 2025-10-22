@@ -4,29 +4,7 @@ import { ImageWithFallback } from './figma/ImageWithFallback';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from './ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import { getAllTrainers } from '../api/api';
-
-interface Trainer {
-  id: number;
-  name: string;
-  expertise: string[];
-  avatarUrl: string;
-}
-
-
-const fetchTrainers = async (): Promise<Trainer[]> => {
-  const { data } = await getAllTrainers();
- 
-
- 
-  const trainersArray = data.trainers || data || [];
-
-  return trainersArray.map((trainer: any) => ({
-    id: trainer.id ?? Math.random(),
-    name: trainer.name || 'Unknown Trainer',
-    expertise: trainer.expertise || [],
-    avatarUrl: trainer.avatarUrl || '/fallback-image.jpg',
-  }));
-};
+import { trainersLocal, type Trainer } from '../data/trainersLocal';
 
 // Komponen utama
 export const Trainers = () => {
@@ -36,14 +14,43 @@ export const Trainers = () => {
 
   const [trainers, setTrainers] = useState<Trainer[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isUsingLocalData, setIsUsingLocalData] = useState(false);
 
   useEffect(() => {
     const loadTrainers = async () => {
       try {
-        const trainersData = await fetchTrainers();
-        setTrainers(trainersData);
+        setLoading(true);
+        setIsUsingLocalData(false);
+
+        // Timeout untuk request API (5 detik)
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const { data } = await getAllTrainers();
+        clearTimeout(timeoutId);
+
+        const trainersArray = data.trainers || data || [];
+        const formattedTrainers = trainersArray.map((trainer: any) => ({
+          id: trainer.id ?? Math.random(),
+          name: trainer.name || 'Unknown Trainer',
+          expertise: trainer.expertise || [],
+          avatarUrl: trainer.avatarUrl || '/fallback-image.jpg',
+        }));
+
+        if (formattedTrainers.length === 0) {
+          // API berhasil tapi data kosong
+          console.log("📦 API response kosong, menggunakan data lokal trainers");
+          setTrainers(trainersLocal);
+          setIsUsingLocalData(true);
+        } else {
+          setTrainers(formattedTrainers);
+          setIsUsingLocalData(false);
+        }
       } catch (err) {
-        console.error('Gagal mengambil data trainer:', err);
+        // API gagal - fallback ke data lokal
+        console.log("📦 Mode lokal aktif - Menampilkan trainers dari data lokal");
+        setTrainers(trainersLocal);
+        setIsUsingLocalData(true);
       } finally {
         setLoading(false);
       }

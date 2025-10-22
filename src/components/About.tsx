@@ -9,15 +9,8 @@ import {
     CarouselPrevious,
 } from './ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
-import { getALlGalleries } from '../api/api'; 
-
-// Tipe data untuk item galeri yang digunakan di frontend
-interface GalleryItem {
-    id: number;
-    src: string;
-    alt: string;
-    title: string;
-}
+import { getALlGalleries } from '../api/api';
+import { galleriesLocal, type GalleryItem } from '../data/galleriesLocal';
 
 // Tipe data respon API Galeri (sesuai log Anda)
 interface GalleryApiData {
@@ -48,53 +41,39 @@ const normalizeGalleryData = (apiResult: any): GalleryItem[] => {
 export const About = () => {
     const [galleryImages, setGalleryImages] = useState<GalleryItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [hasError, setHasError] = useState(false);
+    const [isUsingLocalData, setIsUsingLocalData] = useState(false);
 
-    const FALLBACK_IMAGES: GalleryItem[] = [
-        {
-            id: 991, 
-            src: "https://images.unsplash.com/photo-1758691736067-b309ee3ef7b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb3Jwb3JhdGUlMjB0cmFpbmluZyUyMGNsYXNzcm9vbXxlbnwxfHx8fDE3NjAxOTMyNzR8MA&ixlib=rb-4.1.0&q=80&w=1080",
-            alt: "Ruang Kelas Modern (Fallback)",
-            title: "Ruang Kelas Modern (Fallback)"
-        },
-        {
-            id: 992,
-            src: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-            alt: "Sesi Pelatihan Interaktif (Fallback)",
-            title: "Sesi Pelatihan Interaktif (Fallback)"
-        },
-    ];
-
-    
     useEffect(() => {
         const fetchGallery = async () => {
             try {
                 setIsLoading(true);
-                setHasError(false);
+                setIsUsingLocalData(false);
                 
+                // Timeout untuk request API (5 detik)
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000);
                 
-                const result = await getALlGalleries(); 
+                const result = await getALlGalleries();
+                clearTimeout(timeoutId);
 
-                
-                console.log("Full API Result for About:", result);
-
-                
                 const formattedImages = normalizeGalleryData(result);
 
                 if (formattedImages.length === 0) {
-                  
-                    console.warn("API returned successfully but array is empty. Using fallback.");
-                    setGalleryImages(FALLBACK_IMAGES);
+                    // API berhasil tapi data kosong - gunakan local
+                    console.log("📦 API response kosong, menggunakan data lokal galeri");
+                    setGalleryImages(galleriesLocal);
+                    setIsUsingLocalData(true);
                 } else {
+                    // Sukses mendapat data dari API
                     setGalleryImages(formattedImages);
+                    setIsUsingLocalData(false);
                 }
 
             } catch (err) {
-                
-                console.error("Gagal mengambil data galeri dari API. Menggunakan fallback.", err);
-                setHasError(true);
-              
-                setGalleryImages(FALLBACK_IMAGES);
+                // API gagal - fallback ke data lokal
+                console.log("📦 Mode lokal aktif - Menampilkan galeri dari data lokal");
+                setGalleryImages(galleriesLocal);
+                setIsUsingLocalData(true);
             } finally {
                 setIsLoading(false);
             }

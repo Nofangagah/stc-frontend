@@ -9,49 +9,57 @@ import {
   CarouselPrevious,
 } from "./ui/carousel";
 import { getAllArticles } from '../api/api';
-
-interface BlogPost {
-  id: number;
-  title: string;
-  content: string;
-  author: string;
-  tags: string[];
-  imageUrl: string;
-  createdAt: string;
-}
+import { articlesLocal, type BlogPost } from '../data/articlesLocal';
 
 const formatDate = (dateString: string) => {
   const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(dateString).toLocaleDateString('id-ID', options);
 };
 
-const fetchBlogPosts = async (): Promise<BlogPost[]> => {
-  const { data } = await getAllArticles();
- 
-  return data.map((post: any) => ({
-    id: post.id,
-    title: post.title,
-    content: post.content,
-    author: post.author || 'Admin',
-    tags: post.tags || [],
-    imageUrl: post.imageUrl || '/fallback-image.jpg',
-    createdAt: post.createdAt,
-  }));
-};
-
-
+// Komponen utama
 export const Blog = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [selectedPost, setSelectedPost] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isUsingLocalData, setIsUsingLocalData] = useState(false);
 
   useEffect(() => {
     const loadPosts = async () => {
       try {
-        const articles = await fetchBlogPosts();
-        setPosts(articles);
+        setLoading(true);
+        setIsUsingLocalData(false);
+
+        // Timeout untuk request API (5 detik)
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const { data } = await getAllArticles();
+        clearTimeout(timeoutId);
+
+        const formattedArticles = data.map((post: any) => ({
+          id: post.id,
+          title: post.title,
+          content: post.content,
+          author: post.author || 'Admin',
+          tags: post.tags || [],
+          imageUrl: post.imageUrl || '/fallback-image.jpg',
+          createdAt: post.createdAt,
+        }));
+
+        if (formattedArticles.length === 0) {
+          // API berhasil tapi data kosong
+          console.log("📦 API response kosong, menggunakan data lokal articles");
+          setPosts(articlesLocal);
+          setIsUsingLocalData(true);
+        } else {
+          setPosts(formattedArticles);
+          setIsUsingLocalData(false);
+        }
       } catch (err) {
-        console.error('Gagal mengambil artikel:', err);
+        // API gagal - fallback ke data lokal
+        console.log("📦 Mode lokal aktif - Menampilkan artikel dari data lokal");
+        setPosts(articlesLocal);
+        setIsUsingLocalData(true);
       } finally {
         setLoading(false);
       }
