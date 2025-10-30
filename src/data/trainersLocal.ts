@@ -7,6 +7,7 @@ import trainer4 from '../assets/trainer-4.jpg';
 import trainer5 from '../assets/trainer-5.jpg';
 import trainer6 from '../assets/trainer-6.jpg';
 import trainer7 from '../assets/trainer-7.jpg';
+import trainer8 from '../assets/trainer-8.jpg';
 import trainer9 from '../assets/trainer-9.jpg';
 import trainer10 from '../assets/trainer-10.jpg';
 
@@ -68,7 +69,7 @@ export const trainersLocal: Trainer[] = [
         id: 8,
         name: "Nicky Shaquilla",
         expertise: ["Professional Broadcaster & MC"],
-        avatarUrl: comingSoonPlaceholder
+        avatarUrl: trainer8
     },
     {
         id: 9,
@@ -81,5 +82,5 @@ export const trainersLocal: Trainer[] = [
         name: "Arifah Putri",
         expertise: ["Professional Public Speaker"],
         avatarUrl: trainer10
-    }
+    }  
 ];
