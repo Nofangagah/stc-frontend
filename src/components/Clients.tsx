@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import bni from '../assets/bni-logo.png';
 import bri from '../assets/bri-logo.png';
 import srm from '../assets/srm-logo.png';
@@ -56,6 +56,15 @@ import uksw from '../assets/uksw-logo.png';
 
 
 export const Clients = () => {
+  // detect mobile to use 3x duplication (animate -33.333%) and desktop to keep original look
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
 
   const clientLogosRow1 = [
     { name: 'Bank Negara Indonesia', logo: bni },
@@ -125,7 +134,7 @@ export const Clients = () => {
 
   
   const LogoItem = ({ name, logo }: { name: string; logo: string }) => (
-    <div className={"clients-logo-item flex-shrink-0 w-36 h-20 sm:w-44 sm:h-24 bg-white rounded-lg shadow-md mx-2 flex items-center justify-center hover:shadow-xl transition-shadow duration-300 p-3 sm:p-4"}>
+    <div className={"clients-logo-item flex-shrink-0 w-36 h-20 md:w-32 md:h-20 bg-white rounded-lg shadow-md flex items-center justify-center hover:shadow-xl transition-shadow duration-300 p-3 md:p-4 md:mx-2"}>
       <img 
         src={logo} 
         alt={name}
@@ -135,13 +144,13 @@ export const Clients = () => {
   );
 
   
-  const ScrollingRow = ({ direction, logos }: { direction: 'left' | 'right'; logos: Array<{ name: string; logo: string }> }) => {
+  const ScrollingRow = ({ direction, logos, rowClass = '', duplicates }: { direction: 'left' | 'right'; logos: Array<{ name: string; logo: string }>; rowClass?: string; duplicates: number }) => {
     if (logos.length === 0) return null;
     
     return (
       <div className="relative mb-6 scrolling-row">
-        <div className={`flex scrolling-row-inner ${direction === 'right' ? 'animate-scroll-right' : 'animate-scroll-left'}`}>
-          {[...Array(2)].map((_, index) => (
+        <div className={`flex scrolling-row-inner ${rowClass} ${direction === 'right' ? 'animate-scroll-right' : 'animate-scroll-left'}`}>
+          {[...Array(duplicates)].map((_, index) => (
             <div key={index} className="flex">
               {logos.map((client, idx) => (
                 <LogoItem key={`${index}-${idx}`} name={client.name} logo={client.logo} />
@@ -167,9 +176,9 @@ export const Clients = () => {
 
       
       <div className="relative z-10">
-        <ScrollingRow direction="right" logos={clientLogosRow1} />
-        <ScrollingRow direction="left" logos={clientLogosRow2} />
-        <ScrollingRow direction="right" logos={clientLogosRow3} />
+        <ScrollingRow duplicates={isMobile ? 3 : 4} rowClass="row-1" direction="right" logos={clientLogosRow1} />
+        <ScrollingRow duplicates={isMobile ? 3 : 4} rowClass="row-2" direction="left" logos={clientLogosRow2} />
+        <ScrollingRow duplicates={isMobile ? 3 : 4} rowClass="row-3" direction="right" logos={clientLogosRow3} />
       </div>
 
       {clientLogosRow1.length === 0 && clientLogosRow2.length === 0 && clientLogosRow3.length === 0 && (
