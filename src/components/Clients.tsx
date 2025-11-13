@@ -1,4 +1,4 @@
-
+import React, { useEffect, useState } from 'react';
 import bni from '../assets/bni-logo.png';
 import bri from '../assets/bri-logo.png';
 import srm from '../assets/srm-logo.png';
@@ -56,6 +56,15 @@ import uksw from '../assets/uksw-logo.png';
 
 
 export const Clients = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
 
   const clientLogosRow1 = [
     { name: 'Bank Negara Indonesia', logo: bni },
@@ -116,9 +125,16 @@ export const Clients = () => {
     { name: 'Universitas Kristen Satya Wacana', logo: uksw },
   ];
 
+  const allLogos = [
+    ...clientLogosRow1,
+    ...clientLogosRow2,
+    ...clientLogosRow3,
+  ];
+  const uniqueLogos = Array.from(new Map(allLogos.map(l => [l.name, l])).values());
+
   
-  const LogoItem = ({ name, logo }: { name: string; logo: string }) => (
-    <div className="clients-logo-item flex-shrink-0 w-32 h-20 bg-white rounded-lg shadow-md mx-2 flex items-center justify-center hover:shadow-xl transition-shadow duration-300 p-4">
+  const LogoItem = ({ name, logo, fluid = false }: { name: string; logo: string; fluid?: boolean }) => (
+    <div className={`clients-logo-item flex-shrink-0 ${fluid ? 'w-full h-20' : 'w-32 h-20'} bg-white rounded-lg shadow-md mx-2 flex items-center justify-center hover:shadow-xl transition-shadow duration-300 p-4`}>
       <img 
         src={logo} 
         alt={name}
@@ -160,15 +176,21 @@ export const Clients = () => {
       </div>
 
       
-      <div className="relative z-10">
-        <ScrollingRow direction="right" logos={clientLogosRow1} />
-
-      
-        <ScrollingRow direction="left" logos={clientLogosRow2} />
-
-      
-        <ScrollingRow direction="right" logos={clientLogosRow3} />
-      </div>
+      {isMobile ? (
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+            {uniqueLogos.map((client) => (
+              <LogoItem key={client.name} name={client.name} logo={client.logo} fluid />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="relative z-10">
+          <ScrollingRow direction="right" logos={clientLogosRow1} />
+          <ScrollingRow direction="left" logos={clientLogosRow2} />
+          <ScrollingRow direction="right" logos={clientLogosRow3} />
+        </div>
+      )}
 
       {clientLogosRow1.length === 0 && clientLogosRow2.length === 0 && clientLogosRow3.length === 0 && (
         <div className="container mx-auto px-4 relative z-10">
