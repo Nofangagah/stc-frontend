@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import Autoplay from 'embla-carousel-autoplay';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from './ui/carousel';
 import bni from '../assets/bni-logo.png';
 import bri from '../assets/bri-logo.png';
 import srm from '../assets/srm-logo.png';
@@ -57,6 +59,9 @@ import uksw from '../assets/uksw-logo.png';
 
 export const Clients = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const plugin = React.useRef(
+    Autoplay({ delay: 2500, stopOnInteraction: true })
+  );
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
@@ -178,11 +183,24 @@ export const Clients = () => {
       
       {isMobile ? (
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
-            {uniqueLogos.map((client) => (
-              <LogoItem key={client.name} name={client.name} logo={client.logo} fluid />
-            ))}
-          </div>
+          <Carousel
+            plugins={[plugin.current]}
+            className="w-full"
+            opts={{ align: 'start', loop: true }}
+          >
+            <CarouselContent className="-ml-2">
+              {uniqueLogos.map((client) => (
+                <CarouselItem
+                  key={client.name}
+                  className="pl-2 basis-[65%] sm:basis-[55%] md:basis-[50%]"
+                >
+                  <LogoItem name={client.name} logo={client.logo} fluid />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="left-0 bg-[#F9B800] hover:bg-[#e0a700] text-black border-none z-20" />
+            <CarouselNext className="right-0 bg-[#F9B800] hover:bg-[#e0a700] text-black border-none z-20" />
+          </Carousel>
         </div>
       ) : (
         <div className="relative z-10">
