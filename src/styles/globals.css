@@ -221,6 +221,31 @@ html {
   .container {
     overflow-x: hidden;
   }
+
+  /*
+    Mobile: disable infinite scroll animation for client logos and allow wrapping
+    so logos don't overlap / stack on small screens. We also reduce spacing
+    slightly for better fit on narrow displays.
+  */
+  .animate-scroll-left,
+  .animate-scroll-right {
+    animation: none !important;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .animate-scroll-left > div,
+  .animate-scroll-right > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  /* tweak spacing for individual logo tiles on mobile */
+  .clients-logo-item {
+    margin: 0.375rem !important;
+  }
 }
 
 /* Scroll Margin for Sections - Prevents navbar from covering section titles */

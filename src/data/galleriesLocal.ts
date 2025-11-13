@@ -1,6 +1,6 @@
 // Import foto galeri dari folder assets
 // Upload foto dengan nama: gallery-1.jpg, gallery-2.jpg, dst.
-import gallery1 from '../assets/gallery-1.JPG';
+import gallery1 from '../assets/gallery-1.jpg';
 import gallery2 from '../assets/gallery-2.jpg';
 import gallery3 from '../assets/gallery-3.jpg';
 import gallery4 from '../assets/gallery-4.jpg';
