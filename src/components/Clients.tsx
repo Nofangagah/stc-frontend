@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import Autoplay from 'embla-carousel-autoplay';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from './ui/carousel';
+import React from 'react';
 import bni from '../assets/bni-logo.png';
 import bri from '../assets/bri-logo.png';
 import srm from '../assets/srm-logo.png';
@@ -58,18 +56,6 @@ import uksw from '../assets/uksw-logo.png';
 
 
 export const Clients = () => {
-  const [isMobile, setIsMobile] = useState(false);
-  const plugin = React.useRef(
-    Autoplay({ delay: 2500, stopOnInteraction: true })
-  );
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px)');
-    const update = () => setIsMobile(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
-  }, []);
 
   const clientLogosRow1 = [
     { name: 'Bank Negara Indonesia', logo: bni },
@@ -138,8 +124,8 @@ export const Clients = () => {
   const uniqueLogos = Array.from(new Map(allLogos.map(l => [l.name, l])).values());
 
   
-  const LogoItem = ({ name, logo, fluid = false }: { name: string; logo: string; fluid?: boolean }) => (
-    <div className={`clients-logo-item flex-shrink-0 ${fluid ? 'w-full h-20' : 'w-32 h-20'} bg-white rounded-lg shadow-md mx-2 flex items-center justify-center hover:shadow-xl transition-shadow duration-300 p-4`}>
+  const LogoItem = ({ name, logo }: { name: string; logo: string }) => (
+    <div className={"clients-logo-item flex-shrink-0 w-28 h-16 sm:w-32 sm:h-20 bg-white rounded-lg shadow-md mx-2 flex items-center justify-center hover:shadow-xl transition-shadow duration-300 p-4"}>
       <img 
         src={logo} 
         alt={name}
@@ -155,8 +141,7 @@ export const Clients = () => {
     return (
       <div className="relative mb-6 scrolling-row">
         <div className={`flex scrolling-row-inner ${direction === 'right' ? 'animate-scroll-right' : 'animate-scroll-left'}`}>
-         
-          {[...Array(4)].map((_, index) => (
+          {[...Array(2)].map((_, index) => (
             <div key={index} className="flex">
               {logos.map((client, idx) => (
                 <LogoItem key={`${index}-${idx}`} name={client.name} logo={client.logo} />
@@ -181,34 +166,11 @@ export const Clients = () => {
       </div>
 
       
-      {isMobile ? (
-        <div className="container mx-auto px-4 relative z-10">
-          <Carousel
-            plugins={[plugin.current]}
-            className="w-full"
-            opts={{ align: 'start', loop: true }}
-          >
-            <CarouselContent className="-ml-2">
-              {uniqueLogos.map((client) => (
-                <CarouselItem
-                  key={client.name}
-                  className="pl-2 basis-[65%] sm:basis-[55%] md:basis-[50%]"
-                >
-                  <LogoItem name={client.name} logo={client.logo} fluid />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="left-0 bg-[#F9B800] hover:bg-[#e0a700] text-black border-none z-20" />
-            <CarouselNext className="right-0 bg-[#F9B800] hover:bg-[#e0a700] text-black border-none z-20" />
-          </Carousel>
-        </div>
-      ) : (
-        <div className="relative z-10">
-          <ScrollingRow direction="right" logos={clientLogosRow1} />
-          <ScrollingRow direction="left" logos={clientLogosRow2} />
-          <ScrollingRow direction="right" logos={clientLogosRow3} />
-        </div>
-      )}
+      <div className="relative z-10">
+        <ScrollingRow direction="right" logos={clientLogosRow1} />
+        <ScrollingRow direction="left" logos={clientLogosRow2} />
+        <ScrollingRow direction="right" logos={clientLogosRow3} />
+      </div>
 
       {clientLogosRow1.length === 0 && clientLogosRow2.length === 0 && clientLogosRow3.length === 0 && (
         <div className="container mx-auto px-4 relative z-10">
