@@ -125,7 +125,7 @@ export const Clients = () => {
 
   
   const LogoItem = ({ name, logo }: { name: string; logo: string }) => (
-    <div className={"clients-logo-item flex-shrink-0 w-28 h-16 sm:w-32 sm:h-20 bg-white rounded-lg shadow-md mx-2 flex items-center justify-center hover:shadow-xl transition-shadow duration-300 p-4"}>
+    <div className={"clients-logo-item flex-shrink-0 w-36 h-20 sm:w-44 sm:h-24 bg-white rounded-lg shadow-md mx-2 flex items-center justify-center hover:shadow-xl transition-shadow duration-300 p-3 sm:p-4"}>
       <img 
         src={logo} 
         alt={name}
