@@ -246,6 +246,36 @@ html {
   .clients-logo-item {
     margin: 0.375rem !important;
   }
+
+  /* For very small screens, convert scrolling rows into a 2-column grid to
+     prevent logos from overlapping. This will only apply on mobile (<=768px). */
+  .scrolling-row .scrolling-row-inner {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    align-items: center;
+    justify-items: center;
+    animation: none !important;
+  }
+
+  /* Make each logo tile stretch to the grid cell and reduce fixed sizing */
+  .scrolling-row .clients-logo-item {
+    width: 100% !important;
+    height: auto !important;
+    padding: 0.75rem !important;
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .scrolling-row .clients-logo-item img {
+    max-width: 80%;
+    max-height: 48px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
 }
 
 /* Scroll Margin for Sections - Prevents navbar from covering section titles */

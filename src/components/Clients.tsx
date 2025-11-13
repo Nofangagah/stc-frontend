@@ -132,8 +132,8 @@ export const Clients = () => {
     if (logos.length === 0) return null;
     
     return (
-      <div className="relative mb-6">
-        <div className={`flex ${direction === 'right' ? 'animate-scroll-right' : 'animate-scroll-left'}`}>
+      <div className="relative mb-6 scrolling-row">
+        <div className={`flex scrolling-row-inner ${direction === 'right' ? 'animate-scroll-right' : 'animate-scroll-left'}`}>
          
           {[...Array(4)].map((_, index) => (
             <div key={index} className="flex">
