@@ -97,14 +97,16 @@ export const Trainers = () => {
               {trainers.map((trainer) => (
                 <CarouselItem
                   key={trainer.id}
-                  className="pl-2 md:pl-4 lg:pl-6 basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/5"
+                  // make each item slightly narrower on mobile so neighboring cards peek
+                  className="pl-2 md:pl-4 lg:pl-6 basis-[88%] sm:basis-[92%] md:basis-1/2 lg:basis-1/3 xl:basis-1/5"
                 >
                   <Card className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
-                    <div className="relative h-64 sm:h-72 md:h-80 lg:h-96 overflow-hidden flex-shrink-0">
+                    {/* reduce mobile image height slightly and keep head visible using object-top */}
+                    <div className="relative h-56 sm:h-72 md:h-80 lg:h-96 overflow-hidden flex-shrink-0">
                       <ImageWithFallback
                         src={trainer.avatarUrl}
                         alt={trainer.name}
-                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                        className="w-full h-full object-cover object-top sm:object-center transition-transform duration-300 hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                     </div>
