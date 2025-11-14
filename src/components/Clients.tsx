@@ -150,10 +150,14 @@ export const Clients = () => {
     // Option A seam guard: extend each segment by repeating first logo at the end
     const extendedLogos = logos.length > 0 ? [...logos, logos[0]] : logos;
 
+    const animationClass = isMobileProp
+      ? (direction === 'right' ? 'animate-scroll-right-var' : 'animate-scroll-left-var')
+      : (direction === 'right' ? 'animate-scroll-right' : 'animate-scroll-left');
+
     return (
       <div className="relative mb-6 scrolling-row">
         <div
-          className={`flex scrolling-row-inner ${rowClass} ${direction === 'right' ? 'animate-scroll-right-var' : 'animate-scroll-left-var'}`}
+          className={`flex scrolling-row-inner ${rowClass} ${animationClass}`}
           style={
             isMobileProp
               ? ({
