@@ -222,64 +222,29 @@ html {
     overflow-x: hidden;
   }
 
-  /* Ensure marquee rows stay in one line on mobile */
+  /* Mobile marquee rows stay single-line flex; use gap for precise width */
   .scrolling-row { overflow: hidden; }
   .scrolling-row .scrolling-row-inner {
     flex-wrap: nowrap;
     width: max-content;
-    gap: 0.75rem; /* use gap, not card margins, for precise width */
+    gap: 0.75rem;
     transform: translate3d(0,0,0);
     will-change: transform;
   }
   .clients-logo-item { margin: 0 !important; }
 
-  /* per-row speed using CSS variables */
-  .row-1 { --speed: 22s; }
-  .row-2 { --speed: 25s; }
-  .row-3 { --speed: 28s; }
-
-  /* 3x duplication: move by one third for seamless loop */
-  @keyframes scroll-left-3 {
-    from { transform: translateX(0); }
-    to { transform: translateX(-33.333%); }
+  /* Variable-based keyframes for Option A seam guard (uses --cycle-fraction & --offset-start) */
+  @keyframes scroll-left-var {
+    from { transform: translateX(var(--offset-start,0)); }
+    to { transform: translateX(calc(var(--offset-start,0) - var(--cycle-fraction))); }
   }
-  @keyframes scroll-right-3 {
-    from { transform: translateX(-33.333%); }
-    to { transform: translateX(0); }
+  @keyframes scroll-right-var {
+    from { transform: translateX(calc(var(--offset-start,0) - var(--cycle-fraction))); }
+    to { transform: translateX(var(--offset-start,0)); }
   }
 
-  .animate-scroll-left { animation: scroll-left-3 var(--speed, 22s) linear infinite; }
-  .animate-scroll-right { animation: scroll-right-3 var(--speed, 22s) linear infinite; }
-
-  /* For very small screens, convert scrolling rows into a 2-column grid to
-     prevent logos from overlapping. This will only apply on mobile (<=768px). */
-  .scrolling-row .scrolling-row-inner {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem;
-    align-items: center;
-    justify-items: center;
-    animation: none !important;
-  }
-
-  /* Make each logo tile stretch to the grid cell and reduce fixed sizing */
-  .scrolling-row .clients-logo-item {
-    width: 100% !important;
-    height: auto !important;
-    padding: 0.75rem !important;
-    margin: 0 !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .scrolling-row .clients-logo-item img {
-    max-width: 80%;
-    max-height: 48px;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-  }
+  .animate-scroll-left-var { animation: scroll-left-var var(--speed,22s) linear infinite; }
+  .animate-scroll-right-var { animation: scroll-right-var var(--speed,22s) linear infinite; }
 }
 
 /* Scroll Margin for Sections - Prevents navbar from covering section titles */
@@ -306,15 +271,8 @@ section[id] {
   }
 }
 
-.animate-scroll-left {
-  animation: scroll-left 22s linear infinite;
-  will-change: transform;
-}
-
-.animate-scroll-right {
-  animation: scroll-right 22s linear infinite;
-  will-change: transform;
-}
+.animate-scroll-left { animation: scroll-left 22s linear infinite; will-change: transform; }
+.animate-scroll-right { animation: scroll-right 22s linear infinite; will-change: transform; }
 
 /* Add your custom styles here */
 

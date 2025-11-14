@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useIsMobile } from './ui/use-mobile';
 import bni from '../assets/bni-logo.png';
 import bri from '../assets/bri-logo.png';
 import srm from '../assets/srm-logo.png';
@@ -56,15 +57,8 @@ import uksw from '../assets/uksw-logo.png';
 
 
 export const Clients = () => {
-  // detect mobile to use 3x duplication (animate -33.333%) and desktop to keep original look
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px)');
-    const update = () => setIsMobile(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
-  }, []);
+  // use shared hook so logic is isolated and component stays clean
+  const isMobile = useIsMobile();
 
   const clientLogosRow1 = [
     { name: 'Bank Negara Indonesia', logo: bni },
@@ -134,7 +128,13 @@ export const Clients = () => {
 
   
   const LogoItem = ({ name, logo }: { name: string; logo: string }) => (
-    <div className={"clients-logo-item flex-shrink-0 w-36 h-20 md:w-32 md:h-20 bg-white rounded-lg shadow-md flex items-center justify-center hover:shadow-xl transition-shadow duration-300 p-3 md:p-4 md:mx-2"}>
+    <div
+      className={
+        isMobile
+          ? "clients-logo-item flex-shrink-0 w-36 h-20 bg-white rounded-lg shadow-md flex items-center justify-center hover:shadow-xl transition-shadow duration-300 p-3"
+          : "clients-logo-item flex-shrink-0 w-32 h-20 bg-white rounded-lg shadow-md mx-2 flex items-center justify-center hover:shadow-xl transition-shadow duration-300 p-4"
+      }
+    >
       <img 
         src={logo} 
         alt={name}
@@ -144,16 +144,37 @@ export const Clients = () => {
   );
 
   
-  const ScrollingRow = ({ direction, logos, rowClass = '', duplicates }: { direction: 'left' | 'right'; logos: Array<{ name: string; logo: string }>; rowClass?: string; duplicates: number }) => {
+  const ScrollingRow = ({ direction, logos, rowClass = '', duplicates, isMobileProp }: { direction: 'left' | 'right'; logos: Array<{ name: string; logo: string }>; rowClass?: string; duplicates: number; isMobileProp: boolean }) => {
     if (logos.length === 0) return null;
-    
+
+    // Option A seam guard: extend each segment by repeating first logo at the end
+    const extendedLogos = logos.length > 0 ? [...logos, logos[0]] : logos;
+
     return (
       <div className="relative mb-6 scrolling-row">
-        <div className={`flex scrolling-row-inner ${rowClass} ${direction === 'right' ? 'animate-scroll-right' : 'animate-scroll-left'}`}>
+        <div
+          className={`flex scrolling-row-inner ${rowClass} ${direction === 'right' ? 'animate-scroll-right-var' : 'animate-scroll-left-var'}`}
+          style={
+            isMobileProp
+              ? ({
+                  // cycle fraction matches duplication distance (one third for 3, one half for 4)
+                  ['--cycle-fraction' as any]: duplicates === 3 ? '33.333%' : '50%',
+                  // tiny start offset to hide seam flicker
+                  ['--offset-start' as any]: '-0.75px',
+                  ['--speed' as any]: rowClass === 'row-1' ? '22s' : rowClass === 'row-2' ? '25s' : '28s'
+                } as React.CSSProperties)
+              : ({
+                  ['--cycle-fraction' as any]: '50%',
+                  ['--offset-start' as any]: '0px'
+                } as React.CSSProperties)
+          }
+        >
           {[...Array(duplicates)].map((_, index) => (
             <div key={index} className="flex">
-              {logos.map((client, idx) => (
-                <LogoItem key={`${index}-${idx}`} name={client.name} logo={client.logo} />
+              {extendedLogos.map((client, idx) => (
+                <div key={`${index}-${idx}`} aria-hidden={idx === extendedLogos.length - 1 ? 'true' : undefined}>
+                  <LogoItem name={client.name} logo={client.logo} />
+                </div>
               ))}
             </div>
           ))}
@@ -176,9 +197,21 @@ export const Clients = () => {
 
       
       <div className="relative z-10">
-        <ScrollingRow duplicates={isMobile ? 3 : 4} rowClass="row-1" direction="right" logos={clientLogosRow1} />
-        <ScrollingRow duplicates={isMobile ? 3 : 4} rowClass="row-2" direction="left" logos={clientLogosRow2} />
-        <ScrollingRow duplicates={isMobile ? 3 : 4} rowClass="row-3" direction="right" logos={clientLogosRow3} />
+        {isMobile ? (
+          <>
+            {/* Mobile version: controlled 3x duplication & gap logic (CSS in media query) */}
+            <ScrollingRow isMobileProp={true} duplicates={3} rowClass="row-1" direction="right" logos={clientLogosRow1} />
+            <ScrollingRow isMobileProp={true} duplicates={3} rowClass="row-2" direction="left" logos={clientLogosRow2} />
+            <ScrollingRow isMobileProp={true} duplicates={3} rowClass="row-3" direction="right" logos={clientLogosRow3} />
+          </>
+        ) : (
+          <>
+            {/* Desktop version: original 4x duplication ensures long smooth marquee */}
+            <ScrollingRow isMobileProp={false} duplicates={4} rowClass="row-1" direction="right" logos={clientLogosRow1} />
+            <ScrollingRow isMobileProp={false} duplicates={4} rowClass="row-2" direction="left" logos={clientLogosRow2} />
+            <ScrollingRow isMobileProp={false} duplicates={4} rowClass="row-3" direction="right" logos={clientLogosRow3} />
+          </>
+        )}
       </div>
 
       {clientLogosRow1.length === 0 && clientLogosRow2.length === 0 && clientLogosRow3.length === 0 && (
