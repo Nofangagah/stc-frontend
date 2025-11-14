@@ -224,8 +224,32 @@ html {
 
   /* Ensure marquee rows stay in one line on mobile */
   .scrolling-row { overflow: hidden; }
-  .scrolling-row .scrolling-row-inner { flex-wrap: nowrap; }
-  .clients-logo-item { margin: 0.25rem !important; }
+  .scrolling-row .scrolling-row-inner {
+    flex-wrap: nowrap;
+    width: max-content;
+    gap: 0.75rem; /* use gap, not card margins, for precise width */
+    transform: translate3d(0,0,0);
+    will-change: transform;
+  }
+  .clients-logo-item { margin: 0 !important; }
+
+  /* per-row speed using CSS variables */
+  .row-1 { --speed: 22s; }
+  .row-2 { --speed: 25s; }
+  .row-3 { --speed: 28s; }
+
+  /* 3x duplication: move by one third for seamless loop */
+  @keyframes scroll-left-3 {
+    from { transform: translateX(0); }
+    to { transform: translateX(-33.333%); }
+  }
+  @keyframes scroll-right-3 {
+    from { transform: translateX(-33.333%); }
+    to { transform: translateX(0); }
+  }
+
+  .animate-scroll-left { animation: scroll-left-3 var(--speed, 22s) linear infinite; }
+  .animate-scroll-right { animation: scroll-right-3 var(--speed, 22s) linear infinite; }
 
   /* For very small screens, convert scrolling rows into a 2-column grid to
      prevent logos from overlapping. This will only apply on mobile (<=768px). */
